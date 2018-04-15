@@ -1,6 +1,6 @@
 #include "activitylog.h"
 #include "ui_activitylog.h"
-
+//taalai
 ActivityLog::ActivityLog(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ActivityLog)
