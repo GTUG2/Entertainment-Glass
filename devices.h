@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QThread>
+#include <QBluetoothSocket>
+#include <QBluetoothDeviceDiscoveryAgent>
 #include <iostream>
-#include "rfcomm.h"
-#include "scanworker.h"
 #include "activitylog.h"
 
 namespace Ui {
@@ -22,21 +22,24 @@ public:
     ~Devices();
 
 public slots:
-    void addToList(const QString &addr, const QString &name);
     void setMac1(QListWidgetItem *addr);
-    void connectButtonClicked(bool checked = false);
-    void bl1Connected();
-    void bl1Cleaned(const QString &out);
-    void bl1Failed(int code);
-
+    void setMac2(QListWidgetItem *addr);
+    void connectButtonClicked(bool checked);
+    void newDeviceFound(QBluetoothDeviceInfo info);
+    void blConnected();
+    void blError(QBluetoothSocket::SocketError);
 signals:
     void log(const QString &msg);
-    void bl1Connect(const QString &dev, const QString &addr);
+private slots:
+    void on_refreshButton_clicked(bool checked);
+
+    void on_clearButton_clicked(bool checked);
+
 private:
     Ui::Devices *ui;
     ActivityLog *activityLog;
-    QThread *scanThread;
-    RFComm *bl1, *bl2;
+    QBluetoothDeviceDiscoveryAgent *agent;
+    QBluetoothSocket *bl1, *bl2;
 };
 
 #endif // DEVICES_H

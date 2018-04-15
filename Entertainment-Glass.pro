@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui bluetooth
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,15 +26,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         devices.cpp \
-    activitylog.cpp \
-    scanworker.cpp \
-    rfcomm.cpp
+    activitylog.cpp
 
 HEADERS += \
         devices.h \
-    activitylog.h \
-    scanworker.h \
-    rfcomm.h
+    activitylog.h
 
 FORMS += \
         devices.ui \

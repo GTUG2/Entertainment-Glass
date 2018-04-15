@@ -1,31 +1,31 @@
-#include "devices.h"
+﻿#include "devices.h"
 #include "ui_devices.h"
 
 Devices::Devices(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Devices)
 {
+    agent = new QBluetoothDeviceDiscoveryAgent;
+    bl1 = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+    bl2 = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
     ui->setupUi(this);
     activityLog = new ActivityLog(this);
-    scanThread = new QThread;
-    ScanWorker *worker = new ScanWorker();
-    worker->moveToThread(scanThread);
-
-    connect(scanThread, SIGNAL(started()), worker, SLOT(start()));
-    connect(worker, SIGNAL(newDeviceFound(QString,QString)), this, SLOT(addToList(QString,QString)));
 
     connect(ui->devices, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(setMac1(QListWidgetItem*)));
+    connect(ui->devices, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(setMac2(QListWidgetItem*)));
     connect(this, SIGNAL(log(QString)), activityLog, SLOT(addActivity(QString)));
 
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(connectButtonClicked(bool)));
+    connect(agent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)), this, SLOT(newDeviceFound(QBluetoothDeviceInfo)));
 
+    agent->start();
     activityLog->show();
-    scanThread->start();
 }
 
-void Devices::addToList(const QString &addr, const QString &name){
-    ui->devices->addItem(addr + " : " + name);
-    std::cout << addr.toStdString() << " : " << name.toStdString() << std::endl;
+void Devices::newDeviceFound(QBluetoothDeviceInfo info){
+    ui->devices->addItem(new QListWidgetItem(info.address().toString() + " : " + info.name()));
+    log("Device found: " + info.address().toString() + " : " + info.name());
+    qDebug() << "found";
 }
 
 void Devices::setMac1(QListWidgetItem *addr){
@@ -33,32 +33,43 @@ void Devices::setMac1(QListWidgetItem *addr){
     emit log(QString("mac1 set to: " + addr->text()));
 }
 
+void Devices::setMac2(QListWidgetItem *addr){
+    ui->mac2->setText(addr->text().split(" ")[0]);
+    emit log(QString("mac2 set to: " + addr->text()));
+}
+
 void Devices::connectButtonClicked(bool checked){
-    bl1 = new RFComm();
-    bl2 = new RFComm();
-    connect(bl1, SIGNAL(connected()), this, SLOT(bl1Connected()));
-    connect(bl1, SIGNAL(cleaned(QString)), this, SLOT(bl1Cleaned(QString)));
-    connect(bl1, SIGNAL(failed(int)), this, SLOT(bl1Failed(int)));
-    connect(this, SIGNAL(bl1Connect(QString, QString)), bl1, SLOT(conn(QString,QString)));
-    emit bl1Connect("./rf1", ui->mac1->text());
+    bl1->connectToService(QBluetoothAddress(ui->mac1->text()), QBluetoothUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB")), QIODevice::ReadWrite);
+    bl2->connectToService(QBluetoothAddress(ui->mac2->text()), QBluetoothUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB")), QIODevice::ReadWrite);
+    connect(bl1, SIGNAL(connected()), this, SLOT(blConnected()));
+    connect(bl2, SIGNAL(connected()), this, SLOT(blConnected()));
+    connect(bl1, SIGNAL(error(QBluetoothSocket::SocketError)), this, SLOT(blError(QBluetoothSocket::SocketError)));
+    connect(bl2, SIGNAL(error(QBluetoothSocket::SocketError)), this, SLOT(blError(QBluetoothSocket::SocketError)));
 }
 
-void Devices::bl1Connected(){
-    std::cout << "bl1 connected" << std::endl;
-    emit log("bl1 connected");
+void Devices::blConnected(){
+    log("blConnected");
 }
 
-void Devices::bl1Failed(int code){
-    std::cout << "bl1 failed: " << code << std::endl;
-    emit log("bl1 failed: " + code);
-}
-
-void Devices::bl1Cleaned(const QString &out){
-    std::cout << "bl1 cleaned: " << out.toStdString() << std::endl;
-    emit log("bl1 cleaned");
+void Devices::blError(QBluetoothSocket::SocketError err){
+    log("blError");
 }
 
 Devices::~Devices()
 {
     delete ui;
+}
+
+void Devices::on_refreshButton_clicked(bool checked)
+{QByteArray b1, b2;
+    b1.append("bl1: ").append(ui->lineEdit->text());
+    b2.append("bl2: ").append(ui->lineEdit->text());
+    bl1->write(b1);
+    bl2->write(b2);
+}
+
+void Devices::on_clearButton_clicked(bool checked)
+{
+    bl1->write("q");
+    bl2->write("q");
 }
