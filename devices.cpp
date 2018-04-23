@@ -10,6 +10,8 @@ Devices::Devices(QWidget *parent) :
     bl2 = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
     ui->setupUi(this);
     activityLog = new ActivityLog(this);
+    xox = new XOX(this);
+    readerbl1 = new Reader(this);
 
     connect(ui->devices, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(setMac1(QListWidgetItem*)));
     connect(ui->devices, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(setMac2(QListWidgetItem*)));
@@ -18,6 +20,7 @@ Devices::Devices(QWidget *parent) :
     connect(ui->connectButton, SIGNAL(clicked(bool)), this, SLOT(connectButtonClicked(bool)));
     connect(agent, SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)), this, SLOT(newDeviceFound(QBluetoothDeviceInfo)));
 
+    xox->show();
     agent->start();
     activityLog->show();
 }
@@ -42,13 +45,21 @@ void Devices::connectButtonClicked(bool checked){
     bl1->connectToService(QBluetoothAddress(ui->mac1->text()), QBluetoothUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB")), QIODevice::ReadWrite);
     bl2->connectToService(QBluetoothAddress(ui->mac2->text()), QBluetoothUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB")), QIODevice::ReadWrite);
     connect(bl1, SIGNAL(connected()), this, SLOT(blConnected()));
-    connect(bl2, SIGNAL(connected()), this, SLOT(blConnected()));
+    connect(bl2, SIGNAL(connected()), this, SLOT(bl2Connected()));
     connect(bl1, SIGNAL(error(QBluetoothSocket::SocketError)), this, SLOT(blError(QBluetoothSocket::SocketError)));
     connect(bl2, SIGNAL(error(QBluetoothSocket::SocketError)), this, SLOT(blError(QBluetoothSocket::SocketError)));
+    connect(readerbl1, SIGNAL(onpacketreceived(packet)), xox, SLOT(onBoardChange(packet)));
 }
 
 void Devices::blConnected(){
     log("blConnected");
+    readerbl1->setup(bl1);
+    connect(bl1, SIGNAL(readyRead()), readerbl1, SLOT(readready()));
+    //connect(bl1, SIGNAL(readyRead()), this, SLOT(re()));
+}
+
+void Devices::bl2Connected(){
+    log("bl2Connected");
 }
 
 void Devices::blError(QBluetoothSocket::SocketError err){
@@ -70,6 +81,12 @@ void Devices::on_refreshButton_clicked(bool checked)
 
 void Devices::on_clearButton_clicked(bool checked)
 {
-    bl1->write("q");
-    bl2->write("q");
+    //bl1->write("q");
+    //bl2->write("q");
+
+}
+
+void Devices::re(){
+    QByteArray qbt = bl1->read(32);
+    qDebug() << "read bytes:" << qbt.toHex();
 }

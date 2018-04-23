@@ -26,12 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         devices.cpp \
-    activitylog.cpp
+    activitylog.cpp \
+    reader.cpp \
+    xox.cpp
 
 HEADERS += \
         devices.h \
-    activitylog.h
+    activitylog.h \
+    common.h \
+    reader.h \
+    xox.h
 
 FORMS += \
         devices.ui \
-    activitylog.ui
+    activitylog.ui \
+    xox.ui
