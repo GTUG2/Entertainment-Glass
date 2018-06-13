@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui bluetooth
+QT       += core gui bluetooth multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,19 +25,46 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        devices.cpp \
-    activitylog.cpp \
     reader.cpp \
-    xox.cpp
+    xoxframe.cpp \
+    menuframe.cpp \
+    serverui.cpp \
+    devicesframe.cpp \
+    connectframe.cpp \
+    messageframe.cpp \
+    xoxlogic.cpp \
+    connect4logic.cpp \
+    connect4frame.cpp \
+    pingbossframe.cpp \
+    pingbosslogic.cpp
 
 HEADERS += \
-        devices.h \
-    activitylog.h \
     common.h \
     reader.h \
-    xox.h
+    xoxframe.h \
+    menuframe.h \
+    serverui.h \
+    devicesframe.h \
+    connectframe.h \
+    messageframe.h \
+    xoxlogic.h \
+    connect4logic.h \
+    connect4frame.h \
+    pingbossframe.h \
+    pingbosslogic.h
 
 FORMS += \
-        devices.ui \
-    activitylog.ui \
-    xox.ui
+    xoxframe.ui \
+    menuframe.ui \
+    serverui.ui \
+    devicesframe.ui \
+    connectframe.ui \
+    messageframe.ui \
+    frame.ui \
+    xoxdummy.ui \
+    c4dummy.ui \
+    connect4frame.ui \
+    pingbossframe.ui
+
+RESOURCES += \
+    images.qrc

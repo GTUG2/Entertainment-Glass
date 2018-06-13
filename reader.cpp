@@ -11,14 +11,14 @@ void Reader::setup(QBluetoothSocket *sock){
 
 void Reader::readready() {
     size += s->read((char *)((char *)(&p) + size), sizeof(p) - size);
-
+    //qDebug() << "size :" << size;
     if(size == sizeof(p)){
         emit onpacketreceived(p);
-        QString qs;
+        /*QString qs;
         for(char *t = (char *)&p ; t < (char *)((char *)&p + size) ; ++t){
             qs.append(QString::number((int)*t)).append(" ");
         }
-        qDebug() << qs;
+        qDebug() << qs;*/
         size = 0;
     }
 }

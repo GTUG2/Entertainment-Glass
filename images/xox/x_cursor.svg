@@ -1,0 +1,18 @@
+<svg width="150" height="133" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <defs>
+  <filter id="svg_1_blur">
+   <feGaussianBlur stdDeviation="0"/>
+  </filter>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="152" height="135" id="canvas_background" fill="#ecd692"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse fill="#92a8ec" stroke="#000" stroke-width="1.5" cx="75" cy="66.5" id="svg_1" rx="50" ry="50" filter="url(#svg_1_blur)"/>
+  <line fill="none" stroke="#b22e53" stroke-width="20" fill-opacity="null" x1="50" y1="41.5" x2="100" y2="91.5" id="svg_5" stroke-linejoin="null" stroke-linecap="round"/>
+  <line fill="none" stroke="#b22e53" stroke-width="20" fill-opacity="null" x1="50" y1="41.5" x2="100" y2="91.5" id="svg_6" stroke-linejoin="null" stroke-linecap="round" transform="rotate(90, 75, 66.5)"/>
+ </g>
+</svg>

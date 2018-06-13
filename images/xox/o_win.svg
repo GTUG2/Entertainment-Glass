@@ -1,0 +1,17 @@
+<svg width="150" height="133" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <defs>
+  <filter id="svg_1_blur">
+   <feGaussianBlur stdDeviation="0"/>
+  </filter>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect fill="#ecd692" id="canvas_background" height="135" width="152" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse filter="url(#svg_1_blur)" ry="50" rx="50" id="svg_1" cy="66.5" cx="75" stroke-width="1.5" stroke="#000" fill="#2eb28d"/>
+  <path id="svg_3" d="m37.5,66.5l0,0c0,-20.228985 16.789295,-36.627907 37.5,-36.627907l0,0c9.945618,0 19.483856,3.85902 26.516495,10.728077c7.032608,6.86911 10.983505,16.185501 10.983505,25.89983l0,0c0,20.228912 -16.789337,36.627907 -37.5,36.627907l0,0c-20.710705,0 -37.5,-16.398994 -37.5,-36.627907zm18.749962,0l0,0c0,10.114502 8.394699,18.313896 18.750038,18.313896c10.355347,0 18.750038,-8.199394 18.750038,-18.313896c0,-10.114525 -8.394691,-18.313923 -18.750038,-18.313923l0,0c-10.355339,0 -18.750038,8.199398 -18.750038,18.313923z" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="#b22e53"/>
+ </g>
+</svg>
